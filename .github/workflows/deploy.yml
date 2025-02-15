@@ -3,34 +3,35 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write  # Add this to grant write permissions
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4  # Updated to v4
+      - uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'  # Updated to latest stable
+          flutter-version: '3.29.0'
           channel: 'stable'
-          cache: true  # Added caching for faster builds
+          cache: true
 
-      - name: Check Flutter version  # Added version check
+      - name: Check Flutter version
         run: flutter --version
-
-      - name: Clean build
-        run: flutter clean  # Added clean step
 
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build web app
-        run: flutter build web --base-href "/gh-pages/"  # Fixed typo in gh-pages
+        run: flutter build web --release --base-href "/webgallery/"  # Updated base-href to match your repo name
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
+          publish_dir: build/web  # This is correct - it will take the build/web folder
+          force_orphan: true
