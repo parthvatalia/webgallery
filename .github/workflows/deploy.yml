@@ -1,26 +1,33 @@
 name: Deploy Flutter Web App
 on:
   push:
-    branches: [ main ]  # Set this to your default branch
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # Updated to v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.29.0'  # Updated to latest stable
           channel: 'stable'
+          cache: true  # Added caching for faster builds
+
+      - name: Check Flutter version  # Added version check
+        run: flutter --version
+
+      - name: Clean build
+        run: flutter clean  # Added clean step
 
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build web app
-        run: flutter build web --base-href "/gh-pahes/"
+        run: flutter build web --base-href "/gh-pages/"  # Fixed typo in gh-pages
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
