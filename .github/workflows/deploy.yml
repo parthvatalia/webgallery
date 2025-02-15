@@ -24,10 +24,7 @@ jobs:
         run: flutter pub get
 
       - name: Build web app
-        run: |
-          flutter build web --release \
-            --base-href "/webgallery/" \
-            --web-renderer canvaskit
+        run: flutter build web --release --base-href "/webgallery/"
 
       - name: Fix base href in index.html
         run: |
